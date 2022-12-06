@@ -6,6 +6,7 @@ pub fn run() {
     let contents = fs::read_to_string("day2.txt")
         .expect("Should have been able to read the file");
     part1(contents.clone());
+    part2(contents.clone());
 }
 
 pub fn part1(contents: String) {
@@ -29,6 +30,30 @@ pub fn part1(contents: String) {
             Greater =>  if opponent == &1 && me == &3 { *me } else { me + 6 },
         };
         score += round_score;
+    }
+    println!("Total: {score}")
+}
+
+
+pub fn part2(contents: String) {
+    let mut score = 0;
+    let values = HashMap::from([
+        ("A", 1),
+        ("B", 2),
+        ("C", 3),
+    ]);
+    for line in contents.split("\n") {
+        if line.is_empty() { continue; }
+        let res: Vec<&str> = line.split(" ").collect();
+        let opponent = values.get(res[0]).unwrap();
+        let me = res[1];
+        let round_score = match me {
+            "X" => if opponent == &1 { 3 } else { opponent - 1 },
+            "Y" => opponent + 3,
+            "Z" => if opponent == &3 { 7 } else { opponent + 7 },
+            _ => panic!()
+        };
+        score += round_score
     }
     println!("Total: {score}")
 }
